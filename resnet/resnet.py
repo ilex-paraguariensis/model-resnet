@@ -144,8 +144,8 @@ class ResNet(nn.Module):
         zero_init_residual: bool = False,
         groups: int = 1,
         width_per_group: int = 64,
-        replace_stride_with_dilation: Optional[List[bool]] = None,
-        norm_layer: Optional[Callable[..., nn.Module]] = None,
+        replace_stride_with_dilation: Optional[List[bool]] = [False, False, False],
+        norm_layer: Optional[Callable[..., nn.Module]] = nn.BatchNorm2d,
     ) -> None:
         super().__init__()
         if norm_layer is None:
