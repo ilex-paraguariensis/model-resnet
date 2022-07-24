@@ -137,7 +137,7 @@ class Bottleneck(nn.Module):
 class ResNet(nn.Module):
     def __init__(
         self,
-        block: Type[Union[BasicBlock, Bottleneck]] = BasicBlock,
+        block: Type[Union[BasicBlock, Bottleneck, str]] = 'BasicBlock',
         layers: List[int] = [3, 4, 6, 3],
         num_classes: int = 1000,
         in_channels: int = 3,
@@ -145,9 +145,20 @@ class ResNet(nn.Module):
         groups: int = 1,
         width_per_group: int = 64,
         replace_stride_with_dilation: Optional[List[bool]] = [False, False, False],
-        norm_layer: Optional[Callable[..., nn.Module]] = nn.BatchNorm2d,
+        norm_layer: Type[Union[nn.BatchNorm2d, str]] = 'BatchNorm2d',
     ) -> None:
         super().__init__()
+
+        if block == "BasicBlock":
+            block = BasicBlock
+        elif block == "Bottleneck":
+            block = Bottleneck
+
+        if norm_layer == "BatchNorm2d":
+            norm_layer = nn.BatchNorm2d
+        elif norm_layer == "InstanceNorm2d":
+            norm_layer = nn.InstanceNorm2d
+
         if norm_layer is None:
             norm_layer = nn.BatchNorm2d
         self._norm_layer = norm_layer
